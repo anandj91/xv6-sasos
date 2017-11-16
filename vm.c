@@ -8,7 +8,7 @@
 #include "elf.h"
 
 extern char data[];  // defined by kernel.ld
-pde_t *kpgdir;  // for use in scheduler()
+pde_t *kpgdir = (uint) 0;  // for use in scheduler()
 
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
@@ -127,6 +127,10 @@ static struct kmap {
 pde_t*
 setupkvm(void)
 {
+  if (kpgdir) {
+    return kpgdir;
+  }
+
   pde_t *pgdir;
   struct kmap *k;
 

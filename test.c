@@ -4,6 +4,7 @@
 
 int main()
 {
-    printf(1, "Hello world!!!\n");
+    printf(1, "Single address space is up!!!\n");
+    for(;;);
     exit();
 }

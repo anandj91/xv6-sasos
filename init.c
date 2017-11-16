@@ -5,7 +5,7 @@
 #include "user.h"
 #include "fcntl.h"
 
-char *argv[] = { "sh", 0 };
+char *argv[] = { "test", 0 };
 
 int
 main(void)
@@ -20,6 +20,11 @@ main(void)
   dup(0);  // stderr
 
   for(;;){
+    exec("test", argv);
+    /*
+     * Following code is not going to run
+     */
+
     printf(1, "init: starting sh\n");
     pid = fork();
     if(pid < 0){
