@@ -20,7 +20,11 @@ main(void)
   dup(0);  // stderr
 
   for(;;){
-    exec("test", argv);
+    printf(1, "Why don't we try forkexec\n");
+    forkexec("test", argv);
+    wait();
+    printf(1, "OMG!!! I can't believe it worked\n");
+    for(;;);
     /*
      * Following code is not going to run
      */

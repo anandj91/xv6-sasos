@@ -115,6 +115,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             forkexec(char*, char**);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

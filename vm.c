@@ -343,7 +343,6 @@ copyuvm(pde_t *pgdir, uint sz)
   return d;
 
 bad:
-  freevm(d);
   return 0;
 }
 
