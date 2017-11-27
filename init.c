@@ -5,8 +5,7 @@
 #include "user.h"
 #include "fcntl.h"
 
-char *argv[] = { "test", 0 };
-
+char *argv[] = { "ipc_process1", 0 };
 int
 main(void)
 {
@@ -21,7 +20,7 @@ main(void)
 
   for(;;){
     printf(1, "Why don't we try forkexec\n");
-    forkexec("test", argv);
+    forkexec("ipc_process1", argv);
     wait();
     printf(1, "OMG!!! I can't believe it worked\n");
     for(;;);
