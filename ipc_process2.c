@@ -23,7 +23,7 @@ void itoa(int num, char* str, int base)
   int i = 0;
   
 
-  /* Handle 0 explicitely, otherwise empty string is printed for 0 */
+  // Handle 0 explicitely, otherwise empty string is printed for 0 
   if (num == 0)
   {
     str[i++] = '0';
@@ -66,7 +66,7 @@ main()
   int count = 1000;
   // Write and read variable
   int buf_size = 7;
-  char buffer[20] = "2000000";
+  //char buffer[20] = "2000000";
   char readbuff[20];
   int readnum;
 
@@ -82,10 +82,7 @@ main()
     }
  
 
-    if(write(op[1], buffer, buf_size) != buf_size ){
-      printf(1,"error in write for child !!!!");
-      exit();
-    }
+    
 
     readnum = atoi(readbuff);
 
@@ -93,8 +90,12 @@ main()
 
     readnum++;
 
-    itoa(readnum, buffer, 10);
+    itoa(readnum, readbuff, 10);
 
+    if(write(op[1], readbuff, buf_size) != buf_size ){
+      printf(1,"error in write for child !!!!");
+      exit();
+    }
   }
   
   exit();

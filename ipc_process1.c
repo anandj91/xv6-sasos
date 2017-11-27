@@ -22,7 +22,7 @@ void itoa(int num, char* str, int base)
   int i = 0;
   
 
-  /* Handle 0 explicitely, otherwise empty string is printed for 0 */
+  // Handle 0 explicitely, otherwise empty string is printed for 0 
   if (num == 0)
   {
     str[i++] = '0';
@@ -103,7 +103,7 @@ main()
     readnum = atoi(readbuff);
     printf(1,"Number is(p) : %d \n", readnum);
 
-    readnum++;
+    readnum += 2;
 
     itoa(readnum, buffer, 10);
 
