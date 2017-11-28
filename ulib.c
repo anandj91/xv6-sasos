@@ -92,6 +92,46 @@ atoi(const char *s)
   return n;
 }
 
+
+void reverse(char s[])
+{
+  int i, j;
+  char c;
+ 
+  for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+    c = s[i];
+    s[i] = s[j];
+    s[j] = c;
+  }
+}
+void itoa(int num, char* str, int base)
+{
+  int i = 0;
+
+  // Handle 0 explicitely, otherwise empty string is printed for 0 
+  if (num == 0)
+  {
+    str[i++] = '0';
+    str[i] = '\0';
+    return;
+  }
+
+  // Process individual digits
+  while (num != 0)
+  {
+    int rem = num % base;
+    str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
+    num = num/base;
+  }
+
+  str[i] = '\0'; // Append string terminator
+
+  // Reverse the string
+  reverse(str);
+
+
+}
+
 void*
 memmove(void *vdst, void *vsrc, int n)
 {
