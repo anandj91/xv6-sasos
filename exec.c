@@ -99,8 +99,6 @@ exec(char *path, char **argv)
   return 0;
 
  bad:
-  if(pgdir)
-    freevm(pgdir);
   if(ip){
     iunlockput(ip);
     end_op();
