@@ -1,5 +1,17 @@
 struct stat;
 struct rtcdate;
+//struct queue;
+
+
+#define QUEUE_SIZE 100
+struct queue{
+  int read;
+  int write;
+  char buff[QUEUE_SIZE];
+};
+
+
+//typedef struct queue queue;
 
 // system calls
 int fork(void);
@@ -40,3 +52,9 @@ void free(void*);
 int atoi(const char*);
 void reverse(char *);
 void itoa(int , char*, int);
+
+void write2q(struct queue*, char);
+char readq(struct queue*);
+void writen2q(struct queue*, char*, int);
+void readnq(struct queue*, char*, int );
+void displayQueue(struct queue*);
