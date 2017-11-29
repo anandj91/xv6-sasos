@@ -136,6 +136,7 @@ vectors.S: vectors.pl
 
 ULIB = ulib.o usys.o printf.o umalloc.o
 
+
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0x`hexdump -n 1 -e '"%X"' /dev/random`00000 -o $@ $^
 	$(OBJDUMP) -S $@ > $*.asm
@@ -174,7 +175,8 @@ UPROGS=\
 	_zombie\
 	_test\
 	_ipc_process1\
-	_ipc_process2
+	_ipc_process2\
+	_test_queue
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -244,7 +246,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c test.c ipc_process1.c ipc_process2.c\
+	printf.c umalloc.c test.c ipc_process1.c ipc_process2.c test_queue.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
