@@ -26,6 +26,7 @@ OBJS = \
 	trap.o\
 	uart.o\
 	vectors.o\
+	shmem.o\
 	vm.o\
 
 # Cross-compiling (e.g., on Mac OS X)
@@ -176,7 +177,9 @@ UPROGS=\
 	_test\
 	_ipc_process1\
 	_ipc_process2\
-	_test_queue
+	_test_queue\
+	_shmem_process1\
+	_shmem_process2\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -246,7 +249,8 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c test.c ipc_process1.c ipc_process2.c test_queue.c\
+	printf.c umalloc.c test.c ipc_process1.c ipc_process2.c\
+	test_queue.c shmem_process1 shmem_process2\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

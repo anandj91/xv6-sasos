@@ -465,3 +465,20 @@ sys_forkexec(void)
   }
   return forkexec(path, argv);
 }
+
+int
+sys_shmem_alloc(void)
+{
+  return (int) shmem_alloc();
+}
+
+int
+sys_shmem_free(void)
+{
+  int ref;
+  if (argint(1, (int*)&ref) < 0) {
+    return 0;
+  }
+  shmem_free((void*) ref);
+  return 0;
+}
