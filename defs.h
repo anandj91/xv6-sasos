@@ -175,6 +175,12 @@ void            switchuvm(struct proc*);
 void            switchkvm(void);
 int             copyout(pde_t*, uint, void*, uint);
 void            clearpteu(pde_t *pgdir, char *uva);
+int             remapsharedmem(pde_t*, void*, void**);
+
+// shmem.c
+void            shmem_init(void);
+void*           shmem_alloc(void);
+void            shmem_free(void* mem);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))

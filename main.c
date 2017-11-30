@@ -32,6 +32,7 @@ main(void)
   binit();         // buffer cache
   fileinit();      // file table
   ideinit();       // disk
+  shmem_init();    // shared memory
   if(!ismp)
     timerinit();   // uniprocessor timer
   startothers();   // start other processors

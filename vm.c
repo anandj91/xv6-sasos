@@ -387,6 +387,16 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
   return 0;
 }
 
+int
+remapsharedmem(pde_t *pgdir, void *va, void** nva)
+{
+  char *a;
+  memset(va, 0, PGSIZE);
+  a = (char*) (((uint)va & (~0x80000000)) | (0x70000000));
+  *nva = a;
+  return mappages(pgdir, a, PGSIZE, V2P(va), PTE_W|PTE_U);
+}
+
 //PAGEBREAK!
 // Blank page.
 //PAGEBREAK!

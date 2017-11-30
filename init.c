@@ -7,6 +7,8 @@
 
 char *argv1[] = { "ipc_process1", 0 };
 char *argv2[] = { "test_queue", 0 };
+char *argv3[] = { "shmem_process1", 0 };
+
 int
 main(void)
 {
@@ -25,6 +27,8 @@ main(void)
     printf(1,"Calling test Queue : \n");
     forkexec("test_queue", argv2);
     wait();
+    printf(1,"Calling shared memory demo\n");
+    forkexec("shmem_process1", argv3);
     printf(1, "OMG!!! I can't believe it worked\n");
     for(;;);
     /*
