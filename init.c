@@ -5,7 +5,8 @@
 #include "user.h"
 #include "fcntl.h"
 
-char *argv[] = { "ipc_process1", 0 };
+char *argv1[] = { "ipc_process1", 0 };
+char *argv2[] = { "test_queue", 0 };
 int
 main(void)
 {
@@ -20,7 +21,9 @@ main(void)
 
   for(;;){
     printf(1, "Why don't we try forkexec\n");
-    forkexec("ipc_process1", argv);
+    //forkexec("ipc_process1", argv);
+    printf(1,"Calling test Queue : \n");
+    forkexec("test_queue", argv2);
     wait();
     printf(1, "OMG!!! I can't believe it worked\n");
     for(;;);
@@ -35,7 +38,7 @@ main(void)
       exit();
     }
     if(pid == 0){
-      exec("sh", argv);
+      exec("sh", argv1);
       printf(1, "init: exec sh failed\n");
       exit();
     }
