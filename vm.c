@@ -178,7 +178,6 @@ switchuvm(struct proc *p)
   ltr(SEG_TSS << 3);
   if(p->pgdir == 0)
     panic("switchuvm: no pgdir");
-  lcr3(V2P(p->pgdir));  // switch to process's address space
   popcli();
 }
 
@@ -277,6 +276,7 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
         panic("kfree");
       char *v = P2V(pa);
       kfree(v);
+      invlpg((void*) a);
       *pte = 0;
     }
   }
