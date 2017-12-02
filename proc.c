@@ -185,6 +185,7 @@ forkexec(char *path, char **argv)
   struct inode *ip;
   struct proghdr ph;
   pde_t *pgdir = proc->pgdir;
+  uint offset;
 
   begin_op();
   if((ip = namei(path)) == 0){
@@ -201,6 +202,7 @@ forkexec(char *path, char **argv)
 
   // Load program into memory.
   sz = 0;
+  offset = ~0;
   for(i=0, off=elf.phoff; i<elf.phnum; i++, off+=sizeof(ph)){
     if(readi(ip, (char*)&ph, off, sizeof(ph)) != sizeof(ph))
       goto bad;
@@ -212,6 +214,7 @@ forkexec(char *path, char **argv)
       goto bad;
     if((sz = allocuvm(pgdir, ph.vaddr, ph.vaddr + ph.memsz)) == 0)
       goto bad;
+    offset = offset > ph.vaddr ? ph.vaddr : offset;
     if(ph.vaddr % PGSIZE != 0)
       goto bad;
     if(loaduvm(pgdir, (char*)ph.vaddr, ip, ph.off, ph.filesz) < 0)
@@ -231,6 +234,7 @@ forkexec(char *path, char **argv)
 
   np->pgdir = pgdir;
   np->sz = proc->sz;
+  np->offset = offset;
   np->parent = proc;
   *np->tf = *proc->tf;
 
@@ -366,6 +370,7 @@ wait(void)
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
+        freevm(p);
         p->pid = 0;
         p->parent = 0;
         p->name[0] = 0;

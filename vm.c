@@ -286,20 +286,15 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 // Free a page table and all the physical memory pages
 // in the user part.
 void
-freevm(pde_t *pgdir)
+freevm(struct proc *p)
 {
-  uint i;
+  pde_t *pgdir;
 
-  if(pgdir == 0)
-    panic("freevm: no pgdir");
-  deallocuvm(pgdir, KERNBASE, 0);
-  for(i = 0; i < NPDENTRIES; i++){
-    if(pgdir[i] & PTE_P){
-      char * v = P2V(PTE_ADDR(pgdir[i]));
-      kfree(v);
-    }
-  }
-  kfree((char*)pgdir);
+  if(p == 0)
+    panic("freevm: no process");
+
+  pgdir = p->pgdir;
+  deallocuvm(pgdir, p->sz, p->offset);
 }
 
 // Clear PTE_U on a page. Used to create an inaccessible
