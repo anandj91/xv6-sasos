@@ -6,6 +6,19 @@
 #include "mmu.h"
 #include "proc.h"
 #include "elf.h"
+#include "spinlock.h"
+
+#define INVALID_ADDRESS ((uint) -1)
+
+struct desc {
+  uint pa;
+  uint count;
+};
+
+static struct {
+  struct spinlock lock;
+  struct desc desc[NDESC];
+} shmem;
 
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
@@ -249,6 +262,71 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   return newsz;
 }
 
+static int
+deallocpage(pte_t* pte)
+{
+  uint pa;
+  if(pte == 0){
+    return -1;
+  }
+  if(!(*pte & PTE_P)){
+    return 0;
+  }
+  pa = PTE_ADDR(*pte);
+  if(pa == 0){
+    panic("kfree");
+  }
+  kfree((char*) P2V(pa));
+  *pte = 0;
+  return 0;
+}
+
+static int
+shmem_deref(pte_t* pte)
+{
+  uint i, pa;
+
+  if(pte == 0){
+    return -1;
+  }
+  if((*pte & PTE_P) == 0){
+    return -1;
+  }
+  if((*pte & PTE_U) == 0){
+    return -1;
+  }
+
+  pa = (uint) (PTE_ADDR(*pte));
+
+  acquire(&shmem.lock);
+  for(i = 0; i < NDESC; i++){
+    if(pa == shmem.desc[i].pa){
+      break;
+    }
+  }
+  if(i >= NDESC){
+    goto bad;
+  }
+  if(shmem.desc[i].count == 0){
+    panic("shmem_deref: shmem desc has zero count");
+  }
+  if(shmem.desc[i].count > 1){
+    *pte &= ~PTE_P;
+    shmem.desc[i].count -= 1;
+  } else {
+    if(deallocpage(pte)){
+      panic("shmem_deref: unable to deallocate page");
+    }
+    shmem.desc[i].pa = INVALID_ADDRESS;
+    shmem.desc[i].count = 0;
+  }
+  release(&shmem.lock);
+  return 0;
+bad:
+  release(&shmem.lock);
+  return -1;
+}
+
 // Deallocate user pages to bring the process size from oldsz to
 // newsz.  oldsz and newsz need not be page-aligned, nor does newsz
 // need to be less than oldsz.  oldsz can be larger than the actual
@@ -257,7 +335,7 @@ int
 deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
   pte_t *pte;
-  uint a, pa;
+  uint a;
 
   if(newsz >= oldsz)
     return oldsz;
@@ -268,12 +346,12 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
     if(!pte)
       a += (NPTENTRIES - 1) * PGSIZE;
     else if((*pte & PTE_P) != 0){
-      pa = PTE_ADDR(*pte);
-      if(pa == 0)
-        panic("kfree");
-      char *v = P2V(pa);
-      kfree(v);
-      *pte = 0;
+      if(shmem_deref(pte) == 0){
+        continue;
+      }
+      if(deallocpage(pte) != 0){
+        panic("deallocuvm");
+      }
     }
   }
   return newsz;
@@ -311,6 +389,36 @@ clearpteu(pde_t *pgdir, char *uva)
   *pte &= ~PTE_U;
 }
 
+static int
+shmem_copymapping(pde_t* d, void* va, uint pa, uint flags)
+{
+  uint i;
+  int ret;
+
+  acquire(&shmem.lock);
+  for(i = 0; i < NDESC; i++){
+    if(pa == shmem.desc[i].pa){
+      if(shmem.desc[i].count == 0){
+        panic("shmem_copymapping: shmem desc has zero count");
+      }
+      break;
+    }
+  }
+  if(i >= NDESC){
+    ret = -1;
+    goto bad;
+  }
+  if(mappages(d, va, PGSIZE, pa, flags) < 0){
+    ret = -2;
+    goto bad;
+  }
+  ret = 0;
+  shmem.desc[i].count += 1;
+bad:
+  release(&shmem.lock);
+  return ret;
+}
+
 // Given a parent process's page table, create a copy
 // of it for a child.
 pde_t*
@@ -319,6 +427,7 @@ copyuvm(pde_t *pgdir, uint sz)
   pde_t *d;
   pte_t *pte;
   uint pa, i, flags;
+  int ret;
   char *mem;
 
   if((d = setupkvm()) == 0)
@@ -326,10 +435,19 @@ copyuvm(pde_t *pgdir, uint sz)
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
       panic("copyuvm: pte should exist");
-    if(!(*pte & PTE_P))
-      panic("copyuvm: page not present");
+    if(!(*pte & PTE_P)) {
+      // page may not be present due to holes left behind by shmem_free()
+      continue;
+    }
     pa = PTE_ADDR(*pte);
     flags = PTE_FLAGS(*pte);
+    ret = shmem_copymapping(d, (void*)i, pa, flags);
+    if(ret == 0){
+      continue;
+    }
+    if(ret == -2){
+      goto bad;
+    }
     if((mem = kalloc()) == 0)
       goto bad;
     memmove(mem, (char*)P2V(pa), PGSIZE);
@@ -391,3 +509,54 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 //PAGEBREAK!
 // Blank page.
 
+void
+shmem_init(void)
+{
+  uint i;
+  initlock(&shmem.lock, "shmem");
+  for(i = 0; i < NDESC; i++){
+    shmem.desc[i].pa = INVALID_ADDRESS;
+  }
+}
+
+void*
+shmem_alloc(void)
+{
+  uint i;
+  uint sz = proc->sz;
+  uint nbyte = (sz % PGSIZE) + PGSIZE;
+  uint mem = PGROUNDUP(proc->sz);
+  void* ka;
+  acquire(&shmem.lock);
+  for(i = 0; i < NDESC; i++){
+    if(shmem.desc[i].count == 0){
+      break;
+    }
+  }
+  if(i >= NDESC){
+    goto bad;
+  }
+  if(growproc(nbyte) < 0){
+    goto bad;
+  }
+  ka = uva2ka(proc->pgdir, (char*) mem);
+  if(ka == 0 || V2P((uint) ka) == 0){
+    panic("shmem_alloc");
+  }
+  shmem.desc[i].pa = V2P((uint) ka);
+  shmem.desc[i].count = 1;
+  release(&shmem.lock);
+  return (void*) mem;
+bad:
+  release(&shmem.lock);
+  return 0;
+}
+
+int
+shmem_free(void* mem)
+{
+  uint a = PGROUNDDOWN((uint) mem);
+  pte_t* pte = walkpgdir(proc->pgdir, (char*) a, 0);
+
+  return shmem_deref(pte);
+}

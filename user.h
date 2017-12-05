@@ -23,6 +23,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+void* shmem_alloc(void);
+int shmem_free(void*);
 
 // ulib.c
 int stat(char*, struct stat*);

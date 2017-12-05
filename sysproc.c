@@ -89,3 +89,19 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_shmem_alloc(void)
+{
+  return (int) shmem_alloc();
+}
+
+int
+sys_shmem_free(void)
+{
+  int addr;
+
+  if(argint(0, &addr) < 0)
+    return -1;
+  return shmem_free((void*) addr);
+}
