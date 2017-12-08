@@ -6,16 +6,7 @@
 #include "spinlock.h"
 #include "shmem.h"
 
-struct desc {
-  int pid;
-  void* reference;
-};
-
-int NDESC = (PGSIZE - sizeof(struct spinlock))/sizeof(struct desc);
-struct shmem {
-  struct spinlock lock;
-  struct desc desc[(PGSIZE - sizeof(struct spinlock))/sizeof(struct desc)];
-} shmem;
+struct shmem shmem;
 
 void
 shmem_init(void)
