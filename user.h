@@ -36,8 +36,10 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int forkexec(char*, char**);
-void* shmem_alloc(void);
-void shmem_free(void*);
+int shmem_alloc(void);
+int shmem_free(int);
+void* shmem_getref(int);
+int shmem_mapdup(int);
 
 // ulib.c
 int stat(char*, struct stat*);

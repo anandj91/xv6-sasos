@@ -295,6 +295,7 @@ freevm(struct proc *p)
 
   pgdir = p->pgdir;
   deallocuvm(pgdir, p->sz, p->offset);
+  shmem_freeall(p->pid);
 }
 
 // Clear PTE_U on a page. Used to create an inaccessible
@@ -383,13 +384,25 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 }
 
 int
-remapsharedmem(pde_t *pgdir, void *va, void** nva)
+remapsharedmem(pde_t *pgdir, void *ka, void *nva)
 {
-  char *a;
-  memset(va, 0, PGSIZE);
-  a = (char*) (((uint)va & (~0x80000000)) | (0x70000000));
-  *nva = a;
-  return mappages(pgdir, a, PGSIZE, V2P(va), PTE_W|PTE_U);
+  return mappages(pgdir, nva, PGSIZE, V2P(ka), PTE_W|PTE_U);
+}
+
+int
+mapdup(pde_t *pgdir, void *uva, void *nuva){
+  uint ka = (uint) uva2ka(pgdir, uva);
+  return mappages(pgdir, nuva, PGSIZE, V2P(ka), PTE_W|PTE_U);
+}
+
+int
+unmappage(pde_t *pgdir, void *uva){
+  pte_t* pte = walkpgdir(pgdir, uva, 0);
+  if(pte == 0){
+    return -1;
+  }
+  *pte = 0;
+  return 0;
 }
 
 //PAGEBREAK!
