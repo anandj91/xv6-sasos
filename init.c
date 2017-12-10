@@ -23,21 +23,35 @@ main(void)
 
   for(;;){
     printf(1, "Why don't we try forkexec\n");
-    /*
-    for(int i = 100; i < 100000; i = i + 500){
+
+/*
+    itoa(100000,argv1[1],10);
+    asm("int $100");
+    forkexec("ipc_process",argv1);
+    wait();
+
+    asm("int $101");
+*/
+/*
+    for(int i = 100; i < 26000; i = i + 500){
       itoa(i,argv1[1],10);
       forkexec("ipc_process1", argv1);
       wait();
     }
     */
 
+
+
     forkexec("hello_world",argv1);
+
+    // wait();
+    printf(1,"Done with the whatever: \n");
 
     //printf(1,"Calling test Queue : \n");
     //forkexec("test_queue", argv2);
-    wait();
-    printf(1,"Calling shared memory demo\n");
-    forkexec("shmem_process1", argv3);
+    //wait();
+    //printf(1,"Calling shared memory demo\n");
+    //forkexec("shmem_process1", argv3);
     printf(1, "OMG!!! I can't believe it worked\n");
     for(;;);
     /*

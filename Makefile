@@ -174,18 +174,14 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
-	_test\
-	_ipc_process1\
-	_ipc_process2\
 	_hello_world\
 	_hello_world2\
-	_matrix_multiply\
-	_matrix_multiply2\
-	_matrix_multiply3\
-	_matrix_multiply4\
+	_mm1\
+	_mm2\
+	_mm3\
+	_mm4\
 	_test_queue\
-	_shmem_process1\
-	_shmem_process2\
+
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -256,8 +252,8 @@ EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	printf.c umalloc.c test.c ipc_process1.c ipc_process2.c hello_world.c hello_world2.c\
+	mm1.c mm2.c mm3.c mm4.c\
 	test_queue.c shmem_process1 shmem_process2\
-	matrix_multiply.c matrix_multiply2.c matrix_multiply3.c matrix_multiply4.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
