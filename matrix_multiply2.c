@@ -3,7 +3,7 @@
 #include "user.h"
 #include "fcntl.h"
 
-#define N 1000
+#define N 500
 
 void multiply(int mat1[][N], int mat2[][N], int res[][N])
 {
