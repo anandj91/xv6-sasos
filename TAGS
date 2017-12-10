@@ -1,0 +1,662 @@
+
+bio.c,186
+  struct spinlock lock;31,1047
+  struct buf buf[buf32,1071
+  struct buf head;36,1186
+} bcache;37,1205
+binit(40,1221
+bget(63,1749
+bread(100,2673
+bwrite(113,2865
+brelse(124,3049
+
+bootmain.c,95
+#define SECTSIZE 13,355
+bootmain(18,418
+waitdisk(51,1181
+readsect(60,1319
+readseg(79,1764
+
+cat.c,42
+char buf[buf5,56
+cat(8,77
+main(21,241
+
+console.c,506
+static int panicked 19,363
+  struct spinlock lock;22,405
+  int locking;23,429
+} cons;24,444
+printint(27,465
+cprintf(54,879
+panic(106,1750
+#define BACKSPACE 125,2054
+#define CRTPORT 126,2078
+static ushort *crt crt127,2100
+cgaputc(130,2172
+consputc(164,2839
+#define INPUT_BUF 179,3025
+  char buf[buf181,3056
+  uint r;182,3079
+  uint w;183,3104
+  uint e;184,3130
+} input;185,3155
+#define C(187,3165
+consoleintr(190,3209
+consoleread(234,4248
+consolewrite(272,4913
+consoleinit(287,5123
+
+echo.c,11
+main(6,60
+
+exec.c,13
+exec(11,153
+
+file.c,238
+struct devsw devsw[devsw12,140
+  struct spinlock lock;14,175
+  struct file file[file15,199
+} ftable;16,226
+fileinit(19,242
+filealloc(26,341
+filedup(44,639
+fileclose(56,849
+filestat(83,1279
+fileread(96,1469
+filewrite(117,1838
+
+forktest.c,62
+#define N 8,161
+printf(11,183
+forktest(17,249
+main(52,719
+
+fs.c,570
+#define min(23,669
+struct superblock sb;27,832
+readsb(31,886
+bzero(42,1052
+balloc(56,1242
+bfree(81,1764
+  struct spinlock lock;160,4452
+  struct inode inode[inode161,4476
+} icache;162,4506
+iinit(165,4522
+ialloc(181,4982
+iupdate(204,5509
+iget(225,6048
+idup(260,6759
+ilock(271,6936
+iunlock(303,7637
+iput(322,8160
+iunlockput(344,8646
+bmap(361,9083
+itrunc(396,9911
+stati(427,10453
+readi(439,10655
+writei(467,11261
+namecmp(502,11949
+dirlookup(510,12132
+dirlink(537,12722
+skipelem(581,13842
+namex(610,14472
+namei(645,15087
+nameiparent(652,15176
+
+grep.c,107
+char buf[buf7,107
+grep(11,154
+main(39,586
+match(73,1156
+int matchhere(85,1410
+int matchstar(99,1756
+
+ide.c,441
+#define SECTOR_SIZE 15,254
+#define IDE_BSY 16,280
+#define IDE_DRDY 17,307
+#define IDE_DF 18,334
+#define IDE_ERR 19,361
+#define IDE_CMD_READ 21,389
+#define IDE_CMD_WRITE 22,416
+#define IDE_CMD_RDMUL 23,443
+#define IDE_CMD_WRMUL 24,470
+static struct spinlock idelock;30,675
+static struct buf *idequeue;idequeue31,707
+static int havedisk1;33,737
+idewait(38,844
+ideinit(50,1026
+idestart(74,1438
+ideintr(104,2286
+iderw(138,3014
+
+init.c,63
+char *argv1[argv18,116
+char *argv2[argv29,155
+main(11,196
+
+ioapic.c,425
+#define IOAPIC 9,205
+#define REG_ID 11,274
+#define REG_VER 12,321
+#define REG_TABLE 13,373
+#define INT_DISABLED 20,689
+#define INT_LEVEL 21,746
+#define INT_ACTIVELOW 22,811
+#define INT_LOGICAL 23,870
+volatile struct ioapic *ioapic;ioapic25,944
+struct ioapic 28,1040
+  uint reg;29,1056
+  uint pad[pad30,1068
+  uint data;31,1083
+ioapicread(35,1112
+ioapicwrite(42,1193
+ioapicinit(49,1279
+ioapicenable(71,1800
+
+ipc_process1.c,35
+char *argv[argv7,76
+main(10,116
+
+ipc_process2.c,35
+char *argv[argv7,76
+main(10,116
+
+kalloc.c,240
+struct run 15,395
+  struct run *next;next16,408
+  struct spinlock lock;20,441
+  int use_lock;21,465
+  struct run *freelist;freelist22,481
+} kmem;23,505
+kinit1(31,810
+kinit2(39,933
+freerange(46,1024
+kfree(60,1393
+kalloc(83,1887
+
+kbd.c,30
+kbdgetc(7,76
+kbdintr(47,883
+
+kill.c,11
+main(6,60
+
+lapic.c,1245
+#define ID 15,367
+#define VER 16,402
+#define TPR 17,442
+#define EOI 18,488
+#define SVR 19,524
+  #define ENABLE 20,582
+#define ESR 21,631
+#define ICRLO 22,676
+  #define INIT 23,726
+  #define STARTUP 24,774
+  #define DELIVS 25,823
+  #define ASSERT 26,876
+  #define DEASSERT 27,944
+  #define LEVEL 28,976
+  #define BCAST 29,1029
+  #define BUSY 30,1101
+  #define FIXED 31,1133
+#define ICRHI 32,1165
+#define TIMER 33,1223
+  #define X1 34,1284
+  #define PERIODIC 35,1340
+#define PCINT 36,1386
+#define LINT0 37,1442
+#define LINT1 38,1503
+#define ERROR 39,1564
+  #define MASKED 40,1625
+#define TICR 41,1679
+#define TCCR 42,1731
+#define TDCR 43,1783
+volatile uint *lapic;lapic45,1843
+lapicw(48,1902
+lapicinit(56,2032
+cpunum(102,3242
+lapiceoi(131,3933
+microdelay(140,4091
+#define CMOS_PORT 144,4115
+#define CMOS_RETURN 145,4141
+lapicstartap(150,4282
+#define CMOS_STATA 184,5437
+#define CMOS_STATB 185,5463
+#define CMOS_UIP 186,5489
+#define SECS 188,5552
+#define MINS 189,5573
+#define HOURS 190,5594
+#define DAY 191,5615
+#define MONTH 192,5636
+#define YEAR 193,5657
+static uint cmos_read(195,5679
+static void fill_rtcdate(203,5788
+void cmostime(214,6088
+#define    CONV(235,6485
+#undef     CONV242,6659
+
+ln.c,11
+main(6,60
+
+log.c,490
+struct logheader 33,1106
+  int n;34,1125
+  int block[block35,1134
+struct log 38,1160
+  struct spinlock lock;39,1173
+  int start;40,1197
+  int size;41,1210
+  int outstanding;42,1222
+  int committing;43,1281
+  int dev;44,1329
+  struct logheader lh;45,1340
+struct log log;47,1366
+initlog(53,1447
+install_trans(69,1783
+read_head(85,2232
+write_head(101,2600
+recover_from_log(115,2874
+begin_op(125,3076
+end_op(145,3537
+write_log(175,4112
+commit(190,4458
+log_write(211,5073
+
+ls.c,39
+fmtname(7,78
+ls(26,426
+main(74,1386
+
+main.c,169
+static void mpmain(10,163
+main(18,472
+mpenter(45,1427
+mpmain(55,1539
+pde_t entrypgdir[entrypgdir63,1742
+startothers(67,1830
+pde_t entrypgdir[entrypgdir106,3053
+
+memide.c,112
+static int disksize;17,339
+static uchar *memdisk;memdisk18,360
+ideinit(21,389
+ideintr(29,515
+iderw(38,706
+
+mkdir.c,11
+main(6,60
+
+mkfs.c,477
+#define stat 8,119
+#define static_assert(15,274
+#define NINODES 18,358
+int nbitmap 23,475
+int ninodeblocks 24,511
+int nlog 25,549
+int nmeta;26,569
+int nblocks;27,640
+int fsfd;29,680
+struct superblock sb;30,690
+char zeroes[zeroes31,712
+uint freeinode 32,732
+uint freeblock;33,752
+xshort(46,1030
+xint(56,1135
+main(68,1269
+wsect(171,3642
+winode(184,3845
+rinode(198,4066
+rsect(211,4269
+ialloc(224,4470
+balloc(238,4688
+#define min(253,5024
+iappend(256,5072
+
+mp.c,168
+struct cpu cpus[cpus14,290
+int ismp;15,313
+int ncpu;16,323
+uchar ioapicid;17,333
+sum(20,363
+mpsearch1(32,549
+mpsearch(50,1065
+mpconfig(74,1672
+mpinit(93,2060
+
+picirq.c,155
+#define IO_PIC1 8,171
+#define IO_PIC2 9,224
+#define IRQ_SLAVE 11,278
+static ushort irqmask 15,436
+picsetmask(18,499
+picenable(26,606
+picinit(33,717
+
+pipe.c,266
+#define PIPESIZE 10,148
+struct pipe 12,170
+  struct spinlock lock;13,184
+  char data[data14,208
+  uint nread;15,231
+  uint nwrite;16,273
+  int readopen;17,318
+  int writeopen;18,361
+pipealloc(22,413
+pipeclose(59,1060
+pipewrite(78,1388
+piperead(100,1886
+
+printf.c,43
+putc(6,68
+printint(12,126
+printf(40,558
+
+proc.c,440
+  struct spinlock lock;12,180
+  struct proc proc[proc13,204
+} ptable;14,231
+static struct proc *initproc;initproc16,242
+int nextpid 18,273
+pinit(25,384
+allocproc(37,662
+userinit(78,1437
+growproc(111,2247
+fork(132,2685
+forkexec(177,3476
+exit(307,6355
+wait(351,7191
+scheduler(399,8362
+sched(439,9415
+yield(458,9810
+forkret(469,10037
+sleep(490,10534
+wakeup1(528,11356
+wakeup(539,11576
+kill(550,11789
+procdump(574,12318
+
+queue.c,248
+#define N 7,92
+struct queue{queue10,108
+  int read;11,122
+  int write;12,134
+  char buff[buff13,147
+typedef struct queue queue;17,168
+void write(20,198
+char read(48,693
+void writen(77,1085
+void readn(98,1368
+void displayQueue(108,1479
+
+rm.c,11
+main(6,60
+
+sh.c,1130
+#define EXEC 8,101
+#define REDIR 9,117
+#define PIPE 10,133
+#define LIST 11,149
+#define BACK 12,165
+#define MAXARGS 14,182
+struct cmd 16,202
+  int type;17,215
+struct execcmd 20,231
+  int type;21,248
+  char *argv[argv22,260
+  char *eargv[eargv23,283
+struct redircmd 26,311
+  int type;27,329
+  struct cmd *cmd;cmd28,341
+  char *file;file29,360
+  char *efile;efile30,374
+  int mode;31,389
+  int fd;32,401
+struct pipecmd 35,415
+  int type;36,432
+  struct cmd *left;left37,444
+  struct cmd *right;right38,464
+struct listcmd 41,489
+  int type;42,506
+  struct cmd *left;left43,518
+  struct cmd *right;right44,538
+struct backcmd 47,563
+  int type;48,580
+  struct cmd *cmd;cmd49,592
+runcmd(58,750
+getcmd(134,2067
+main(145,2218
+panic(175,2830
+fork1(182,2888
+execcmd(196,3024
+redircmd(207,3188
+pipecmd(223,3511
+listcmd(236,3748
+backcmd(249,3985
+char whitespace[whitespace262,4196
+char symbols[symbols263,4229
+gettoken(266,4262
+peek(311,4871
+parsecmd(328,5198
+parseline(345,5446
+parsepipe(362,5739
+parseredirs(375,5948
+parseblock(400,6480
+parseexec(416,6784
+nulterminate(450,7453
+
+spinlock.c,122
+initlock(13,192
+acquire(25,458
+release(47,996
+getcallerpcs(70,1601
+holding(88,1965
+pushcli(99,2231
+popcli(111,2377
+
+stressfs.c,13
+main(17,466
+
+string.c,127
+memset(5,43
+memcmp(16,228
+memmove(32,427
+memcpy(53,730
+strncmp(59,813
+strncpy(69,981
+safestrcpy(83,1192
+strlen(97,1362
+
+syscall.c,100
+fetchint(18,468
+fetchstr(30,785
+argint(46,1050
+argptr(55,1299
+argstr(72,1749
+syscall(129,3064
+
+sysfile.c,340
+argfd(20,445
+fdalloc(39,805
+sys_dup(53,980
+sys_read(67,1141
+sys_write(79,1318
+sys_close(91,1497
+sys_fstat(104,1645
+sys_link(116,1876
+isdirempty(166,2617
+sys_unlink(182,2904
+create(239,3817
+sys_open(284,4711
+sys_mkdir(334,5539
+sys_mknod(350,5757
+sys_chdir(370,6070
+sys_exec(394,6399
+sys_pipe(420,6857
+sys_forkexec(444,7256
+
+sysproc.c,141
+sys_fork(11,154
+sys_exit(17,195
+sys_wait(24,257
+sys_kill(30,298
+sys_getpid(40,395
+sys_sbrk(46,441
+sys_sleep(60,597
+sys_uptime(83,969
+
+test.c,15
+int main(5,56
+
+test_queue.c,11
+main(8,80
+
+timer.c,209
+#define IO_TIMER1 10,208
+#define TIMER_FREQ 16,397
+#define TIMER_DIV(17,429
+#define TIMER_MODE 19,479
+#define TIMER_SEL0 20,538
+#define TIMER_RATEGEN 21,590
+#define TIMER_16BIT 22,648
+timerinit(25,720
+
+trap.c,129
+struct gatedesc idt[idt12,225
+struct spinlock tickslock;14,320
+uint ticks;15,347
+tvinit(18,365
+idtinit(30,585
+trap(37,651
+
+uart.c,115
+#define COM1 14,219
+static int uart;16,242
+uartinit(19,288
+uartputc(52,970
+uartgetc(64,1127
+uartintr(74,1244
+
+ulib.c,434
+#define N 7,92
+struct queue{queue8,106
+  int read;9,120
+  int write;10,132
+  char buff[buff11,145
+typedef struct queue queue;15,166
+strcpy(19,202
+strcmp(30,306
+strlen(38,423
+memset(48,502
+strchr(55,580
+gets(64,689
+stat(82,922
+atoi(96,1082
+void reverse(107,1198
+void itoa(118,1346
+memmove(147,1802
+void write2q(158,1947
+char readq(186,2444
+void writen2q(215,2837
+void readnq(233,3077
+void displayQueue(243,3190
+
+umalloc.c,279
+typedef long Align;9,175
+union header 11,196
+    union header *ptr;ptr13,222
+    uint size;14,245
+  } s;15,260
+  Align x;16,267
+typedef union header Header;19,282
+static Header base;21,312
+static Header *freep;freep22,332
+free(25,360
+morecore(47,823
+malloc(64,1056
+
+usertests.c,1081
+char buf[buf11,173
+char name[name12,189
+char *echoargv[echoargv13,203
+int stdout 14,263
+iputtest(18,337
+exitiputtest(43,831
+openiputtest(85,1688
+opentest(119,2277
+writetest(139,2609
+writetest1(188,3681
+createtest(245,4745
+void dirtest(267,5152
+exectest(294,5585
+pipe1(306,5771
+preempt(359,6798
+exitwait(405,7516
+mem(428,7841
+sharedfd(465,8476
+fourfiles(518,9579
+createdelete(584,10824
+  enum { N 586,10845
+unlinkread(657,12295
+linktest(702,13157
+concreate(765,14254
+    ushort inum;771,14335
+    char name[name772,14352
+linkunlink(858,16066
+bigdir(893,16603
+subdir(935,17306
+bigwrite(1119,21172
+bigfile(1148,21682
+fourteen(1204,22695
+rmdot(1245,23700
+dirfile(1284,24419
+iref(1344,25624
+forktest(1380,26347
+sbrktest(1415,26824
+#define BIG 1452,27530
+validateint(1550,29814
+validatetest(1563,30039
+char uninit[uninit1593,30651
+bsstest(1595,30676
+bigargtest(1613,31052
+fsfull(1648,32005
+uio(1699,33040
+  #define RTC_ADDR 1701,33048
+  #define RTC_DATA 1702,33072
+unsigned long randstate 1727,33622
+rand(1729,33664
+main(1736,33748
+
+vm.c,480
+pde_t *kpgdir kpgdir11,194
+seginit(16,331
+walkpgdir(45,1243
+mappages(70,1963
+static struct kmap 114,3497
+  void *virt;virt115,3518
+  uint phys_start;116,3532
+  uint phys_end;117,3551
+  int perm;118,3568
+} kmap[kmap119,3580
+setupkvm(128,3928
+kvmalloc(152,4466
+switchkvm(161,4629
+switchuvm(168,4774
+inituvm(188,5400
+loaduvm(203,5775
+allocuvm(227,6422
+deallocuvm(261,7271
+freevm(289,7811
+clearpteu(308,8176
+copyuvm(321,8405
+uva2ka(352,9057
+copyout(368,9437
+
+wc.c,41
+char buf[buf5,56
+wc(8,77
+main(36,538
+
+zombie.c,12
+main(9,124

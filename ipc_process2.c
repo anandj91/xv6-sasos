@@ -7,7 +7,7 @@
 char *argv[] = {"ipc_process1",0};
 
 int
-main()
+main(int argc, char *argv[])
 {
 
   //int pid;
@@ -20,16 +20,14 @@ main()
 
 
 
-  int count = 1000;
+  int count = atoi(argv[1]);
   // Write and read variable
   int buf_size = 7;
   //char buffer[20] = "2000000";
   char readbuff[20];
   int readnum;
 
-  printf(1," in ipc 2 \n");
-
-
+  //printf(1," in ipc 2 \n");
 
   for(int i = 0; i < count; i++){
 
@@ -37,13 +35,11 @@ main()
       printf(1,"error in read for child !!!!");
       exit();
     }
- 
 
-    
 
     readnum = atoi(readbuff);
 
-    printf(1,"Number is(c) : %d \n", readnum);
+    //printf(1,"Number is(c) : %d \n", readnum);
 
     readnum++;
 
