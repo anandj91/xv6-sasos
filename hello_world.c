@@ -8,8 +8,8 @@ int
 main(){
 
   int ut1,ut2,ut;
+/*
 
-  /*
   char *argv[] = {"hello_world2",0};
 
   forkexec("hello_world2",argv);
@@ -21,26 +21,30 @@ main(){
 
   ut = ut2 - ut1;
   printf(1,"The number of ticks is : %d \n ",ut);
+*/
 
-  */
 
   char *argv[] = {"test",0};
 
   ut1 = uptime();
 
-  forkexec("matrix_multiply1",argv);
+  // for(int i = 0; i < 100; i++){
 
-  forkexec("matrix_multiply2",argv);
+    forkexec("mm1",argv);
 
-  forkexec("matrix_multiply3",argv);
+    //forkexec("mm2",argv);
 
-  forkexec("matrix_multiply4",argv);
+    //forkexec("mm3",argv);
 
-  wait();
-  wait();
-  wait();
-  wait();
+    //forkexec("mm4",argv);
 
+    //wait();
+    //wait();
+    //wait();
+    wait();
+
+    // }
+  
   ut2 = uptime();
 
   ut = ut2 - ut1;
