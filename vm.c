@@ -402,6 +402,7 @@ unmappage(pde_t *pgdir, void *uva){
     return -1;
   }
   *pte = 0;
+  invlpg(uva);
   return 0;
 }
 
