@@ -1,8 +1,9 @@
-#define NDESC (PGSIZE - sizeof(struct spinlock))/sizeof(struct desc)
+#define NDESC ((PGSIZE - sizeof(struct spinlock))/sizeof(struct desc))
 
 struct desc {
-  int pid;
   void* reference;
+  int pid;
+  int parentid;
 };
 
 struct shmem {

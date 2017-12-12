@@ -89,3 +89,39 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_shmem_alloc(void)
+{
+  return shmem_alloc();
+}
+
+int
+sys_shmem_free(void)
+{
+  int i;
+  if (argint(0, (int*)&i) < 0) {
+    return -1;
+  }
+  return shmem_free(i);
+}
+
+int
+sys_shmem_getref(void)
+{
+  int i;
+  if (argint(0, (int*)&i) < 0) {
+    return 0;
+  }
+  return (int) shmem_getref(i);
+}
+
+int
+sys_shmem_mapdup(void)
+{
+  int i;
+  if (argint(0, (int*)&i) < 0) {
+    return -1;
+  }
+  return shmem_mapdup(i);
+}
