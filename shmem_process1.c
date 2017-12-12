@@ -7,7 +7,6 @@ int
 main()
 {
   int ip[2] = {3,4};
-  int op[2] = {5,6};
   char *argv[] = {"shmem_process2",0};
   int* mem;
   int* cmem;
@@ -16,8 +15,8 @@ main()
   printf(1,"in shmem 1 \n");
 
   // Creating pipes
-  if(pipe(ip) == -1 || pipe(op) == -1){
-    printf(1, " Error in creating pipes \n");
+  if(pipe(ip) == -1){
+    printf(1, " Error in creating pipe \n");
     exit();
   }
 
@@ -40,12 +39,6 @@ main()
     exit();
   }
 
-  // Read from the child pipe
-  if(read(op[0], (char*)&cmem, 1) != 1){
-    printf(1,"\n Error in read by parent");
-    exit();
-  }
-
   wait();
 
   printf(1, "Got back %d\n", *mem);
@@ -54,8 +47,6 @@ main()
     printf(1, "Unable to free shared mem\n");
     exit();
   }
-
-  printf(1, "Parent got here\n");
 
   exit();
 }
